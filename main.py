@@ -54,6 +54,35 @@ def parse_text_file(filename):
     except (FileNotFoundError, PermissionError):
         return []
     return events
-
+def write_csv(events):
+    with open(OUTPUT_FILE, "w", newline="") as file:
+     writer = csv.DictWriter(
+        file,
+        fieldnames=FIELDS
+        )
+     writer.writeheader()
+     for event in events:
+        writer.writerow(event)
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <input_file>")
+        return
+    filename = sys.argv[1]
+    extension = os.path.splitext(filename)[1].lower()
+    if extension in [".txt", ".log"]:
+     events = parse_text_file(filename)
+    elif extension == ".csv":
+     events = parse_csv_file(filename)
+    elif extension == ".json":
+     events = parse_json_file(filename)
+    else:
+     print("Error: unsupported file format.")
+     print("Supported formats: .txt, .log, .csv, .json")
+     return
+    write_csv(events)
+    print(f"Parsed {len(events)} events.")
+    print(f"Output written to {OUTPUT_FILE}")
+if __name__ == "__main__":
+    main()
 
     
