@@ -2,7 +2,6 @@ import sys
 import os
 import csv
 import json
-
 from parser import parse_text_line, parse_structured_event
 def parse_csv_file(filename):
     events = []
@@ -52,7 +51,6 @@ def parse_text_file(filename):
                     events.append(event)
              except (ValueError, TypeError, AttributeError):
                 continue
-
     except (FileNotFoundError, PermissionError):
         return []
     return events
