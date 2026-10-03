@@ -45,3 +45,40 @@ def parse_text_line(line):
             "pid": pid,
             "port": int(match.group(3))
         }
+
+    # Session opened
+     if "session opened" in line:
+
+        match = re.search(
+            r"session opened for user (\S+)",
+            line
+        )
+
+        return {
+            "timestamp": timestamp,
+            "source_ip": None,
+            "username": match.group(1) if match else None,
+            "event_type": "session_open",
+            "status": None,
+            "pid": pid,
+            "port": None
+        }
+    
+     # Session closed
+     if "session closed" in line:
+
+        match = re.search(
+            r"session closed for user (\S+)",
+            line
+        )
+
+        return {
+            "timestamp": timestamp,
+            "source_ip": None,
+            "username": match.group(1) if match else None,
+            "event_type": "session_close",
+            "status": None,
+            "pid": pid,
+            "port": None
+        }
+     return None
