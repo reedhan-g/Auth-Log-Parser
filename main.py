@@ -41,5 +41,21 @@ def parse_json_file(filename):
      except (FileNotFoundError, PermissionError, json.JSONDecodeError):
         return []
      return events
+def parse_text_file(filename):
+    events = []
+    try:
+        with open(filename, "r") as file:
+         for line in file:
+             try:
+                 event = parse_text_line(line)
+                 if event is not None:
+                    events.append(event)
+             except (ValueError, TypeError, AttributeError):
+                continue
+
+    except (FileNotFoundError, PermissionError):
+        return []
+    return events
+
 
     
