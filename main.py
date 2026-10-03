@@ -3,7 +3,7 @@ import os
 import csv
 import json
 
-from parser import parse, parse_structured_event
+from parser import parse_text_line, parse_structured_event
 def parse_csv_file(filename):
     events = []
     try:
@@ -19,6 +19,27 @@ def parse_csv_file(filename):
     except (FileNotFoundError, PermissionError):
         return []
     return events
+def parse_json_file(filename):
+     try:
+        with open(filename, "r") as file:
+            data = json.load(file)
+        if isinstance(data, dict):
+            data = [data]
+        if not isinstance(data, list):
+            return []
+        for item in data:
+         if not isinstance(item, dict):
+                continue
+         try:
+          event = parse_structured_event(item)
+          if event["event_type"]:
+                    events.append(event)
 
+         except (ValueError, TypeError):
+            continue
+
+     except (FileNotFoundError, PermissionError, json.JSONDecodeError):
+        return []
+     return events
 
     
