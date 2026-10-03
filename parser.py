@@ -82,3 +82,13 @@ def parse_text_line(line):
             "port": None
         }
      return None
+def parse_structured_event(data):
+   return {
+        "timestamp": data.get("timestamp"),
+        "source_ip": data.get("source_ip"),
+        "username": data.get("username"),
+        "event_type": data.get("event_type"),
+        "status": data.get("status"),
+        "pid": data.get("pid"),
+        "port": data.get("port")
+    }
