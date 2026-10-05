@@ -1,4 +1,33 @@
 import re
+from datetime import datetime
+def to_iso8601(ts):
+   if ts is None or ts == "":
+        return None
+   #For UNIX timestamp as int or float
+   if isinstance(ts, (int, float)):
+        return datetime.fromtimestamp(ts).isoformat()
+   #For UNIX timestamp as string
+   if isinstance(ts, str):
+        ts_str = ts.strip()
+        try:
+            num_ts = float(ts_str)
+            return datetime.fromtimestamp(num_ts).isoformat()
+        except ValueError:
+            pass
+    #For already iso
+   try:
+            return datetime.fromisoformat(ts_str).isoformat()
+   except ValueError:
+            pass
+   #Syslog
+   try:
+            dt = datetime.strptime(ts_str, "%b %d %H:%M:%S")
+            dt = dt.replace(year=datetime.now().year)
+            return dt.isoformat()
+   except ValueError:
+            pass
+   return str(ts)
+   
 def parse_text_line(line):
      line = line.strip()
      if not line:
@@ -6,12 +35,11 @@ def parse_text_line(line):
      parts = line.split()
      if len(parts) < 3:
         return None
-     timestamp = " ".join(parts[:3])
-
+     raw_timestamp = " ".join(parts[:3])
+     timestamp = to_iso8601(raw_timestamp)
      #PID
      pid_match = re.search(r"sshd\[(\d+)\]", line)
-     pid = int(pid_match.group(1))
-     if pid_match else None
+     pid = int(pid_match.group(1)) if pid_match else None
 
      #For failed authentication
      match = re.search(
@@ -84,7 +112,7 @@ def parse_text_line(line):
      return None
 def parse_structured_event(data):
    return {
-        "timestamp": data.get("timestamp"),
+        "timestamp": to_iso8601(data.get("timestamp")),
         "source_ip": data.get("source_ip"),
         "username": data.get("username"),
         "event_type": data.get("event_type"),
