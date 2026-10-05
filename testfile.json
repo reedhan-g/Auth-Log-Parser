@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-10-03T19:54:12.115Z",
+  "event_id": "auth_9f8b4c2a-710e",
+  "event_type": "user_login",
+  "status": "success",
+  "actor": {
+    "id": "usr_01H7X2M9",
+    "username": "jdoe@example.com",
+    "role": "administrator"
+  },
+  "network": {
+    "client_ip": "198.51.100.42",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    "request_uri": "/api/v1/auth/login"
+  },
+  "authentication": {
+    "mechanism": "mfa_totp",
+    "credential_type": "password_with_token",
+    "session_duration_minutes": 120
+  }
+}

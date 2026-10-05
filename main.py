@@ -3,6 +3,16 @@ import os
 import csv
 import json
 from parser import parse_text_line, parse_structured_event
+OUTPUT_FILE = "output.csv"
+FIELDS = [
+    "timestamp",
+    "source_ip",
+    "username",
+    "event_type",
+    "status",
+    "pid",
+    "port"
+]
 def parse_csv_file(filename):
     events = []
     try:
@@ -19,6 +29,7 @@ def parse_csv_file(filename):
         return []
     return events
 def parse_json_file(filename):
+     events=[]
      try:
         with open(filename, "r") as file:
             data = json.load(file)
